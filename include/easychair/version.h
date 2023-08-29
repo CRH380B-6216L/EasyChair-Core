@@ -24,11 +24,11 @@ GitHub: https://github.com/chronoxor/CppTemplate
     \namespace CppTemplate
     \brief C++ Template project definitions
 */
-namespace CppTemplate {
+namespace easychair {
 
 //! Project version
-const char version[] = "1.0.2.0";
+const char version[] = "1.0.0.0";
 
-} // namespace CppTemplate
+} 
 
 #endif // CPPTEMPLATE_VERSION_H
