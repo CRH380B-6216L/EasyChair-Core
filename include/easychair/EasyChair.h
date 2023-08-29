@@ -177,36 +177,34 @@ namespace easychair
     class Conference
     {
     public:
-        WorkLanguage Language;
-        TopicSelection TopicSel;
-        UsingRule MyRule;
-        int XmlVersion;
+        const WorkLanguage Language;
+        const UsingRule MyRule;
+        const int XmlVersion;
         string ConferenceTitle;
         string Committee;
-        string[] Topic = new string[1];
+        string Topic[2];
+
         /// <summary>
-        /// 新建单议题会议。
+        /// 新建会议。
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="committee"></param>
-        /// <param name="topic"></param>
-        /// <param name="lang"></param>
-        Conference(string title, string committee, string topic, WorkLanguage lang);
+        /// <param name="title">会议名称。</param>
+        /// <param name="committee">会议的委员会名称。</param>
+        /// <param name="topic1">会议议题</param>
+        /// <param name="topic2">可选。创建双议题会议时会议的第二议题，并将 TopicSel 字段设定为 Unchosen。如果省略该参数，则自动按单议题模式创建会议。</param>
+        /// <param name="lang">会议的工作语言。</param>
+        Conference(string title, string committee, WorkLanguage lang, string topic1, string topic2 = "");
         /// <summary>
-        /// 新建双议题会议。
+        /// 摧毁会议对象。
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="committee"></param>
-        /// <param name="topic1"></param>
-        /// <param name="topic2"></param>
-        /// <param name="lang"></param>
-        Conference(string title, string committee, string topic1, string topic2, WorkLanguage lang);
-        ~Conference() = default;
+        ~Conference();
         /// <summary>
         /// 获取会议议题。
         /// </summary>
         /// <returns></returns>
         string GetTopic();
+
+    private:
+        TopicSelection TopicSel;
     };
     /// <summary>
     /// 表示单个国家。
@@ -227,7 +225,7 @@ namespace easychair
         /// </summary>
         string SchoolDelegates;
         /// <summary>
-        /// 该国投票权限，默认值为1（一票）。
+        /// 该国投票权限，默认值为 1（一票）。
         /// </summary>
         int Competence = 1;
         /// <summary>
@@ -244,16 +242,17 @@ namespace easychair
         bool VetoPower = False;
         //static Nation::Empty = null;
         /// <summary>
-        /// 
+        /// 初始化国家。
         /// </summary>
-        Nation();
-        Nation(string name);
-        Nation(string name, int competence);
-        Nation(string name, int competence, bool VetoPower);
-        Nation(string name, List<Delegate> delegates);
-        Nation(string name, List<Delegate> delegates, int competence);
-        Nation(string name, List<Delegate> delegates, int competence, bool VetoPower);
-        ~Nation() = default;
+        /// <param name="name">国家的名称。</param>
+        /// <param name="competence">可选。表示该国的投票权重，默认值为 1（一票）。</param>
+        /// <param name="vetopower">可选。表示该国是否具有一票否决权。</param>
+        /// <param name="delegates">可选。该国的所有代表（暂不使用）。</param>
+        Nation(string name, int competence = 1, bool vetopower = false, std::list<Delegate> delegates = nullptr);
+        /// <summary>
+        /// 摧毁国家对象。
+        /// </summary>
+        ~Nation();
         /// <summary>
         /// 返回所有代表的姓名。
         /// </summary>
@@ -305,7 +304,7 @@ namespace easychair
         /// <summary>
         /// 返回所有国家的名称。
         /// </summary>
-        /// <param name="Delimiter">可选。任何字符串，用于在返回的字符串中分隔子字符串。如果省略该参数，则使用空白字符 (" ")。如果 Delimiter 是零长度字符串 ("") 或 Nothing，则列表中的所有项目都串联在一起，中间没有分隔符。</param>
+        /// <param name="delimiter">可选。任何字符串，用于在返回的字符串中分隔子字符串。如果省略该参数，则使用空白字符 (" ")。如果 Delimiter 是零长度字符串 ("") 或 Nothing，则列表中的所有项目都串联在一起，中间没有分隔符。</param>
         /// <returns>所有国家名称的字符串表示形式。</returns>
         string ToString(string delimiter = " ");
     };
@@ -313,20 +312,23 @@ namespace easychair
     class SpeakersList
     {
     public:
-        string Name;
+        string slName;
         int slSingleTime;
         const int slTotalTime;
         const bool isYield;
         NationList slNations;
         /// <summary>
-        /// 创建新的发言列表。
+        /// 初始化新的发言列表。
         /// </summary>
         /// <param name="name">发言列表的名称。</param>
-        /// <param name="totaltime">发言列表的总时长，设置为 0 则无限制。</param>
-        /// <param name="singletime">发言列表中每一位发言者的发言时长。</param>
-        /// <param name="yield">定义该列表是否有让渡权。</param>
+        /// <param name="yield">可选。定义该列表是否有让渡权。如果省略该参数，则为 false（无让渡权）。</param>
+        /// <param name="singletime">可选。发言列表中每一位发言者的发言时长。如果省略该参数，则默认指定 120 秒。</param>
+        /// <param name="totaltime">可选。发言列表的总时长，设置为 0 则无限制。如果省略该参数，则默认无限制。</param>
         SpeakersList(string name, bool yield = false, int singletime = 120, int totaltime = 0);
-        ~SpeakersList() = default;
+        /// <summary>
+        /// 摧毁发言列表对象。
+        /// </summary>
+        ~SpeakersList();
         /// <summary>
         /// 向发言列表添加国家。
         /// </summary>
@@ -376,11 +378,11 @@ namespace easychair
         /// <returns></returns>
         NationList Signatories;
         /// <summary>
-        /// 
+        /// 初始化空白的新文件。
         /// </summary>
         File();
         /// <summary>
-        /// 创建新文件。
+        /// 初始化新文件。
         /// </summary>
         /// <param name="title">文件名称。</param>
         /// <param name="path">文件保存路径。</param>
@@ -388,6 +390,9 @@ namespace easychair
         /// <param name="sponser">可选。定义文件起草国。</param>
         /// <param name="signatorie">可选。定义文件附议国。</param>
         File(string title, string path, FileCategory cate, NationList sponser = nullptr, NationList signatory = nullptr);
+        /// <summary>
+        /// 摧毁文件对象。
+        /// </summary>
         ~File();
         /// <summary>
         /// 将当前文件的名称转换为其等效的字符串表示形式。 

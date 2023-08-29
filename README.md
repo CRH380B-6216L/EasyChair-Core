@@ -13,11 +13,11 @@
 EasyChair Core 是 EasyChair 模拟联合国会议主持软件的通用库。
 
 ## 特性
-* Cross platform (Linux, MacOS, Windows)
+* 可跨平台编译（支持 Linux, MacOS, Windows）
 * Benchmarks
 * Examples
 * Tests
-* [Doxygen](http://www.doxygen.org) API documentation
+* 基于 [Doxygen](http://www.doxygen.org) 的完整 API 文档
 * Continuous integration ([Travis CI](https://travis-ci.com), [AppVeyor](https://www.appveyor.com))
 
 ## 系统需求
